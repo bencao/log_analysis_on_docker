@@ -14,8 +14,6 @@ RUN apt-get install -y vim curl wget
 
 RUN apt-get install -y redis-server
 
-RUN sysctl vm.overcommit_memory=1
-
 RUN mkdir -p /opt/redis /export
 ADD ./redis.conf /opt/redis/redis.conf
 ADD ./start_redis.sh /opt/redis/start_redis.sh
