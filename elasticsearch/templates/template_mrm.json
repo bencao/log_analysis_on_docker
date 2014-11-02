@@ -1,0 +1,118 @@
+{
+    "template_mrm": {
+        "template": "mrm*",
+        "settings": {
+            "index.query.default_field": "message",
+            "index.cache.field.type": "soft",
+            "index.store.compress.stored": true,
+            "analysis": {
+              "analyzer": {
+                "default": {
+                  "type": "standard",
+                  "stopwords": "_none_"
+                }
+              }
+            }
+        },
+        "mappings": {
+            "_default_": {
+                "_all": {
+                    "enabled": false
+                },
+                "_source": {
+                    "compress": true
+                },
+                "numeric_detection": false,
+                "date_detection": false,
+                "dynamic_templates": [
+                    {
+                        "all_string": {
+                            "match": "*",
+                            "mapping": {
+                                "type": "string",
+                                "index": "not_analyzed"
+                            }
+                        }
+                    }
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "index": "analyzed"
+                    },
+                    "@timestamp": {
+                        "type": "date",
+                        "index": "not_analyzed"
+                    },
+                    "custom_log": {
+                        "type": "object",
+                        "dynamic": true,
+                        "path": "full",
+                        "properties": {
+                            "db_readonly": {
+                                "type": "boolean"
+                            },
+                            "is_su": {
+                                "type": "boolean"
+                            },
+                            "user_agent": {
+                                "type": "multi_field",
+                                "fields": {
+                                    "user_agent": {
+                                        "type": "string",
+                                        "index": "analyzed"
+                                    },
+                                    "raw": {
+                                        "type": "string",
+                                        "index": "not_analyzed"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "duration": {
+                        "type": "float",
+                        "index": "not_analyzed"
+                    },
+                    "time": {
+                        "type": "date",
+                        "index": "not_analyzed"
+                    },
+                    "payload": {
+                        "type": "object",
+                        "dynamic": true,
+                        "path": "full",
+                        "properties": {
+                            "view_runtime": {
+                                "type": "float",
+                                "index": "not_analyzed"
+                            },
+                            "controller": {
+                                "type": "multi_field",
+                                "fields": {
+                                    "controller": {
+                                        "type": "string",
+                                        "index": "analyzed"
+                                    },
+                                    "raw": {
+                                        "type": "string",
+                                        "index": "not_analyzed"
+                                    }
+                                }
+                            },
+                            "db_runtime": {
+                                "type": "float",
+                                "index": "not_analyzed"
+                            },
+                            "params": {
+                                "type": "object",
+                                "dynamic": true,
+                                "path": "full"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

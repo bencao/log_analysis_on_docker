@@ -1,0 +1,24 @@
+name: loga
+root: $LOGA_DIR
+
+# Optional tmux socket
+# socket_name: foo
+
+# Runs before everything. Use it to start daemons etc.
+# pre: sudo /etc/rc.d/mysqld start
+
+# Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
+# pre_window: rbenv shell 2.0.0-p247
+
+# Pass command line options to tmux. Useful for specifying a different tmux.conf.
+tmux_options: -f $LOGA_DIR/deploy/tmuxinator/tmux.conf
+
+windows:
+  - git: cd $LOGA_DIR
+  - deploy: cd $LOGA_DIR/deploy
+  - schedulerd-log: tail -f $LOGA_EXPORT_DIR/schedulerd/logs/schedulerd.log
+  - monitord-log: tail -f $LOGA_EXPORT_DIR/monitord/logs/uilogd.log
+  - tcp2redis-log: tail -f $LOGA_EXPORT_DIR/logstash/logs/logstash_tcp_to_redis.log
+  - redis2es-log: tail -f $LOGA_EXPORT_DIR/logstash/logs/logstash_redis_to_es.log
+  - es-log: tail -f $LOGA_EXPORT_DIR/es/logs/es01.log
+  - redis-log: tail -f $LOGA_EXPORT_DIR/redis/logs/redis.log
